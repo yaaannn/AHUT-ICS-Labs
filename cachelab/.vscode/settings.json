@@ -1,0 +1,14 @@
+{
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": false,
+    "python.linting.pylamaEnabled": false,
+    "python.linting.banditEnabled": true,
+    "python.languageServer": "None",
+    "files.associations": {
+        "getopt.h": "c",
+        "unistd.h": "c",
+        "posix_opt.h": "c",
+        "types.h": "c"
+    }
+}

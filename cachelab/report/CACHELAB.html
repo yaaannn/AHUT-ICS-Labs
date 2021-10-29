@@ -1,0 +1,1140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-10-21 Thu 08:13 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>计算机系统基础(下)实验报告-Cache Lab</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="何岩, 199074277" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">计算机系统基础(下)实验报告-Cache Lab</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#说明">1. 说明</a></li>
+<li><a href="#解题思路的文字说明">2. 解题思路的文字说明</a>
+<ul>
+<li><a href="#part-a-writing-a-cache-simulator">2.1. Part A: Writing a Cache Simulator</a>
+<ul>
+<li><a href="#cache-结构">2.1.1. Cache 结构</a></li>
+<li><a href="#命令行参数解析">2.1.2. 命令行参数解析</a></li>
+<li><a href="#初始化-cache">2.1.3. 初始化 Cache</a></li>
+<li><a href="#读取文件参数">2.1.4. 读取文件参数</a></li>
+<li><a href="#数据访问">2.1.5. 数据访问</a></li>
+</ul>
+</li>
+<li><a href="#part-boptimizing-matrix-transpose">2.2. Part B：Optimizing Matrix Transpose</a>
+<ul>
+<li><a href="#m-32-n-32">2.2.1. 32 × 32 (M = 32, N = 32)</a></li>
+<li><a href="#m-64-n-64">2.2.2. 64 × 64 (M = 64, N = 64)</a></li>
+<li><a href="#m-61-n-67">2.2.3. 61 × 67 (M = 61, N = 67)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#代码">3. 代码</a>
+<ul>
+<li><a href="#part-a-writing-a-cache-simulator-1">3.1. Part A: Writing a Cache Simulator</a></li>
+<li><a href="#part-boptimizing-matrix-transpose-1">3.2. Part B：Optimizing Matrix Transpose</a></li>
+</ul>
+</li>
+<li><a href="#运行结果与分析">4. 运行结果与分析</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgefd99cc" class="outline-2">
+<h2 id="说明"><a id="orgefd99cc"></a><span class="section-number-2">1</span> 说明</h2>
+<div class="outline-text-2" id="text-说明">
+<ol class="org-ol">
+<li>请提交该文件生成的HTML文件, 生成快捷键为 C-c C-e h h.</li>
+<li>HTML文件名格式: cachelab-2020-179074123-李雷.html</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orga896840" class="outline-2">
+<h2 id="解题思路的文字说明"><a id="orga896840"></a><span class="section-number-2">2</span> 解题思路的文字说明</h2>
+<div class="outline-text-2" id="text-解题思路的文字说明">
+</div>
+<div id="outline-container-orgec32129" class="outline-3">
+<h3 id="part-a-writing-a-cache-simulator"><a id="orgec32129"></a><span class="section-number-3">2.1</span> Part A: Writing a Cache Simulator</h3>
+<div class="outline-text-3" id="text-part-a-writing-a-cache-simulator">
+<p>
+在A部分中，我们要在csim.c中编写一个缓存模拟器，该模拟器以valgrind内存跟踪为输入，在该跟踪上模拟缓存的命中/未命中行为，并输出命中，未命中和逐出的总数。
+</p>
+
+<p>
+我们提供了参考缓存模拟器的二进制可执行文件，称为csim-ref，它可在valgrind跟踪文件上模拟具有任意大小和关联性的缓存行为。它使用LRU替换策略选择出需要的缓存行。
+</p>
+</div>
+
+<div id="outline-container-orgfa378c4" class="outline-4">
+<h4 id="cache-结构"><a id="orgfa378c4"></a><span class="section-number-4">2.1.1</span> Cache 结构</h4>
+<div class="outline-text-4" id="text-cache-结构">
+<p>
+设计Cache基本单元为 block，cache由cacheblock组成
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">typedef</span> <span style="color: #a020f0;">struct</span> 
+{
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">tag</span>;
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">usedtime</span>;
+} <span style="color: #228b22;">block</span>;
+<span style="color: #228b22;">block</span> *<span style="color: #a0522d;">cache</span>;
+</pre>
+</div>
+
+<p>
+其中usedtime是判断LRU
+cache行。初始值为0表示没有用过，相当于invalid。非零值越小代表越少使用，usedtime最大代表刚使用。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdb95d15" class="outline-4">
+<h4 id="命令行参数解析"><a id="orgdb95d15"></a><span class="section-number-4">2.1.2</span> 命令行参数解析</h4>
+<div class="outline-text-4" id="text-命令行参数解析">
+<p>
+阅读官方给的文档，可以知道我们需要完善如下这些命令行参数
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">Usage: ./csim-ref [-hv] -s &lt;s&gt; -E &lt;E&gt; -b &lt;b&gt; -t &lt;tracefile&gt;
+&#8226; -h: Optional help flag that prints usage info
+&#8226; -v: Optional verbose flag that displays trace info
+&#8226; -s &lt;s&gt;: Number of set index bits (<span style="color: #a0522d;">S</span> = 2s is the number of sets)
+&#8226; -E &lt;E&gt;: Associativity (number of lines per set)
+&#8226; -b &lt;b&gt;: Number of block bits (<span style="color: #a0522d;">B</span> = 2b is the block size)
+&#8226; -t &lt;tracefile&gt;: Name of the valgrind trace to replay
+</pre>
+</div>
+
+<p>
+具体代码如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">while</span> ((opt = getopt(argc, argv, <span style="color: #8b2252;">"hvs:E:b:t:"</span>)) != -1)
+{
+    <span style="color: #a020f0;">switch</span> (opt)
+    {
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'h'</span>:
+        print_usage();
+        exit(0);
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'v'</span>:
+        <span style="color: #b22222;">// </span><span style="color: #b22222;">v = 1;</span>
+        <span style="color: #a020f0;">break</span>;
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'s'</span>:
+        s = atoi(optarg);
+        <span style="color: #a020f0;">break</span>;
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'E'</span>:
+        E = atoi(optarg);
+        <span style="color: #a020f0;">break</span>;
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'b'</span>:
+        b = atoi(optarg);
+        <span style="color: #a020f0;">break</span>;
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'t'</span>:
+        f = fopen(optarg, <span style="color: #8b2252;">"r"</span>);
+        <span style="color: #a020f0;">break</span>;
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org38a8045" class="outline-4">
+<h4 id="初始化-cache"><a id="org38a8045"></a><span class="section-number-4">2.1.3</span> 初始化 Cache</h4>
+<div class="outline-text-4" id="text-初始化-cache">
+<div class="org-src-container">
+<pre class="src src-C">cache = (<span style="color: #228b22;">block</span> *)malloc(<span style="color: #a020f0;">sizeof</span>(block) * E &lt;&lt; s);
+<span style="color: #0000ff;">memset</span>(cache, 0, <span style="color: #a020f0;">sizeof</span>(<span style="color: #228b22;">block</span>) * E &lt;&lt; s);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org00a1f04" class="outline-4">
+<h4 id="读取文件参数"><a id="org00a1f04"></a><span class="section-number-4">2.1.4</span> 读取文件参数</h4>
+<div class="outline-text-4" id="text-读取文件参数">
+<p>
+利用fscanf读取trace文件中的指令、地址
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">while</span> (fscanf(f, <span style="color: #8b2252;">"%s%x,%*d\n"</span>, &amp;op, &amp;addr) &gt; 0)
+{
+    <span style="color: #a020f0;">switch</span> (op)
+    {
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'M'</span>:
+        hit++;
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'L'</span>:
+    <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'S'</span>:
+        find(addr, ++t);
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org24baa5b" class="outline-4">
+<h4 id="数据访问"><a id="org24baa5b"></a><span class="section-number-4">2.1.5</span> 数据访问</h4>
+<div class="outline-text-4" id="text-数据访问">
+<p>
+获取=tag=和 <code>set index=同时找到对应的=row</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">tag</span> = addr &gt;&gt; b &gt;&gt; s;
+<span style="color: #228b22;">int</span> <span style="color: #a0522d;">setindex</span> = addr &gt;&gt; b ^ (tag &lt;&lt; s);
+<span style="color: #228b22;">block</span> *<span style="color: #a0522d;">cacherow</span> = cache + E * setindex;
+<span style="color: #228b22;">block</span> *<span style="color: #a0522d;">evictionrow</span> = cacherow;
+</pre>
+</div>
+
+<p>
+进行数据查找，其中evictionrow表示查询过程中LRU的cache行，也就是usedtime最小的（但是非0）在一个set里面遍历cache行
+</p>
+
+<ul class="org-ul">
+<li>如果usedtime！=0且tag匹配：hit</li>
+<li>如果usedtime=0，是个空block，使用这个block：miss</li>
+<li>如果usedtime！=0，tag不匹配，跟evictionrow.usedtime比较，如果时间更小，更新evictionrow=该cacheblock</li>
+</ul>
+
+<p>
+如果循环结束，也就证明这个set的所有cache行都满了，就替换LRU
+cache行。具体代码如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #228b22;">void</span> <span style="color: #0000ff;">find</span>(<span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">addr</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">time</span>)
+{
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">tag</span> = addr &gt;&gt; b &gt;&gt; s;
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">setindex</span> = addr &gt;&gt; b ^ (tag &lt;&lt; s);
+    <span style="color: #228b22;">block</span> *<span style="color: #a0522d;">cacherow</span> = cache + E * setindex;
+    <span style="color: #228b22;">block</span> *<span style="color: #a0522d;">evictionrow</span> = cacherow;
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span> = 0; i &lt; E; i++)
+    {
+        <span style="color: #a020f0;">if</span> (cacherow[i].usedtime &amp;&amp; cacherow[i].tag == tag)
+        {
+            cacherow[i].usedtime = time;
+            hit++;
+            <span style="color: #a020f0;">return</span>;
+        }
+        <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (!cacherow[i].usedtime)
+        {
+            miss++;
+            cacherow[i].usedtime = time;
+            cacherow[i].tag = tag;
+            <span style="color: #a020f0;">return</span>;
+        }
+        <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (cacherow[i].usedtime &lt; evictionrow-&gt;usedtime)
+            evictionrow = cacherow + i;
+    }
+    miss++;
+    eviction++;
+    evictionrow-&gt;usedtime = time;
+    evictionrow-&gt;tag = tag;
+}
+</pre>
+</div>
+
+<p>
+至此，Cache Simulator设计完成，完整代码见下面。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org893c79e" class="outline-3">
+<h3 id="part-boptimizing-matrix-transpose"><a id="org893c79e"></a><span class="section-number-3">2.2</span> Part B：Optimizing Matrix Transpose</h3>
+<div class="outline-text-3" id="text-part-boptimizing-matrix-transpose">
+<p>
+在B部分中，我们将在trans.c中编写一个转置函数，该函数将尽可能降低高速缓存未命中率。需要注意的是，文档中规定了以下几点注意事项：
+</p>
+
+<ol class="org-ol">
+<li>代码必须在没有警告的情况下进行编译才能获得分数。</li>
+<li>每个转置函数最多可以定义12个int类型的局部变量。</li>
+<li>不允许使用long类型的任何变量或使用任何位技巧将多个以上的值存储到单个变量中来避开上一条规则。</li>
+<li>转置函数不能使用递归。</li>
+<li>如果选择使用辅助函数，则在辅助函数和顶级转置函数之间的某个时间堆栈上最多可以包含12个局部变量。例如，如果您的转置声明了8个变量，然后调用了一个使用4个变量的函数，然后调用了另一个使用2个变量的函数，则堆栈中将有14个变量，这将违反规则。</li>
+<li>您的转置函数可能不会修改数组A。但是，您可以对数组B的内容做任何想做的事情。</li>
+<li>您不允许在代码中定义任何数组或使用malloc的任何变体。</li>
+</ol>
+</div>
+
+<div id="outline-container-org1e56163" class="outline-4">
+<h4 id="m-32-n-32"><a id="org1e56163"></a><span class="section-number-4">2.2.1</span> 32 × 32 (M = 32, N = 32)</h4>
+<div class="outline-text-4" id="text-m-32-n-32">
+<p>
+32 × 32: 8 points if m &lt; 300, 0 points if m &gt; 600
+</p>
+
+<p>
+对于32 * 32的矩阵，一次可以装下8行的值。于是用8 *
+8的分块来处理，增加缓存命中。为了避免矩阵对角线访问问题，通过变量一次性读出A的一整行，再存入B。代码如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += 8) {
+    <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 8) {
+        <span style="color: #a020f0;">if</span> (i == j) {
+            <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                a0 = A[k][j];
+                a1 = A[k][j + 1];
+                a2 = A[k][j + 2];
+                a3 = A[k][j + 3];
+                a4 = A[k][j + 4];
+                a5 = A[k][j + 5];
+                a6 = A[k][j + 6];
+                a7 = A[k][j + 7];
+                B[k][j] = a0;
+                B[k][j + 1] = a1;
+                B[k][j + 2] = a2;
+                B[k][j + 3] = a3;
+                B[k][j + 4] = a4;
+                B[k][j + 5] = a5;
+                B[k][j + 6] = a6;
+                B[k][j + 7] = a7;
+            }
+            <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                <span style="color: #a020f0;">for</span> (l = k; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+                    a0 = B[l][k];
+                    B[l][k] = B[k][l];
+                    B[k][l] = a0;
+                }
+            }
+        } <span style="color: #a020f0;">else</span> {
+            <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+                    B[l][k] = A[k][l];
+                }
+            }
+        }
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7d22315" class="outline-4">
+<h4 id="m-64-n-64"><a id="org7d22315"></a><span class="section-number-4">2.2.2</span> 64 × 64 (M = 64, N = 64)</h4>
+<div class="outline-text-4" id="text-m-64-n-64">
+<p>
+64 × 64: 8 points if m &lt; 1, 300, 0 points if m &gt; 2, 000
+</p>
+
+<p>
+还是考虑 8 * 8 分块的情况，不过这一次是在分块内再次分块成 4 个 4 * 4 分
+块，分别处理这 4 个分块。
+</p>
+
+<p>
+首先对左上角和右上角进行处理：
+</p>
+
+<ol class="org-ol">
+<li>B左上角 = A左上角转置。B右上角=A右上角转置。</li>
+<li>我们最后只需要把这部分平移到B的左下角就好。</li>
+</ol>
+
+<p>
+现在B左上角完成
+</p>
+
+<ol class="org-ol">
+<li>首先用四个变量存储A的左下角的一列。</li>
+<li>再用四个变量存储B的右上角的一行。</li>
+<li>把四个变量存储的A的左下角的一列移动到B右上角的一行</li>
+<li>把四个变量存储的B的右上角的一行平移到B左下角的一列</li>
+<li>B的右下角=A的右下角转置</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 8) {
+    i = !(j &gt;&gt; 5) &lt;&lt; 5;
+    <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+        <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+            B[k][i + l - j] = A[k][l];
+    <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+        <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+            B[k - 4][i + l - j + 8] = A[k][l];
+    <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++) {
+        <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+            B[l][k] = B[k][i + l - j];
+        <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+            B[l][k] = B[k - 4][i + l - j + 8];
+    }
+    <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+        <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+            B[l][k] = B[k][i + l - j];
+        <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+            B[l][k] = B[k - 4][i + l - j + 8];
+    }
+    <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += 8) {
+        <span style="color: #a020f0;">if</span> (i != j) {
+            <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 2 &amp;&amp; k &lt; N; k++)
+                <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = A[k][l];
+            a0 = A[i][j + 4];
+            a1 = A[i][j + 5];
+            a2 = A[i][j + 6];
+            a3 = A[i][j + 7];
+            a4 = A[i + 1][j + 4];
+            a5 = A[i + 1][j + 5];
+            a6 = A[i + 1][j + 6];
+            a7 = A[i + 1][j + 7];
+            <span style="color: #a020f0;">for</span> (k = i + 2; k &lt; i + 4 &amp;&amp; k &lt; N; k++) {
+                <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = A[k][l];
+                <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                    B[k - i + j][l - j + i] = A[k][l];
+            }
+            <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 2 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = A[k][l];
+            <span style="color: #a020f0;">for</span> (k = i + 2; k &lt; i + 4 &amp;&amp; k &lt; N; k++)
+                <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 6 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = B[k - i + j][l - j + i];
+            B[j + 4][i] = a0;
+            B[j + 5][i] = a1;
+            B[j + 4][i + 1] = a4;
+            B[j + 5][i + 1] = a5;
+            a0 = B[j + 2][i + 6];
+            a1 = B[j + 2][i + 7];
+            a4 = B[j + 3][i + 6];
+            a5 = B[j + 3][i + 7];
+            <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                <span style="color: #a020f0;">for</span> (l = j + 2; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = A[k][l];
+            B[j + 6][i] = a2;
+            B[j + 7][i] = a3;
+            B[j + 6][i + 1] = a6;
+            B[j + 7][i + 1] = a7;
+            B[j + 6][i + 2] = a0;
+            B[j + 7][i + 2] = a1;
+            B[j + 6][i + 3] = a4;
+            B[j + 7][i + 3] = a5;
+            <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                    B[l][k] = A[k][l];
+        }
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga01b131" class="outline-4">
+<h4 id="m-61-n-67"><a id="orga01b131"></a><span class="section-number-4">2.2.3</span> 61 × 67 (M = 61, N = 67)</h4>
+<div class="outline-text-4" id="text-m-61-n-67">
+<p>
+61 × 67: 10 points if m &lt; 2, 000, 0 points if m &gt; 3, 000
+</p>
+
+<p>
+不规则的matrix，本质也是用分块来优化Cache的读写，但是不能找到比较显然的规律看出来间隔多少可以填满一个Cache。但是由于要求比较松，因此无需考虑处理对角线，直接进行转置操作，仅尝试换用不同的边长分块即可。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += (i % 36 ? 20 : 16)) {
+    <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 4) {
+        <span style="color: #a020f0;">for</span> (k = i; k &lt; i + (i % 36 ? 20 : 16) &amp;&amp; k &lt; N; k += 2) {
+            <span style="color: #a020f0;">if</span> (j &lt; M)
+                a0 = A[k][j];
+            <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                a1 = A[k][j + 1];
+            <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                a2 = A[k][j + 2];
+            <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                a3 = A[k][j + 3];
+            <span style="color: #a020f0;">if</span> (k + 1 &lt; N) {
+                <span style="color: #a020f0;">if</span> (j &lt; M)
+                    a4 = A[k + 1][j];
+                <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                    a5 = A[k + 1][j + 1];
+                <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                    a6 = A[k + 1][j + 2];
+                <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                    a7 = A[k + 1][j + 3];
+            }
+            <span style="color: #a020f0;">if</span> (j &lt; M)
+                B[j][k] = a0;
+            <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                B[j + 1][k] = a1;
+            <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                B[j + 2][k] = a2;
+            <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                B[j + 3][k] = a3;
+            <span style="color: #a020f0;">if</span> (k + 1 &lt; N) {
+                <span style="color: #a020f0;">if</span> (j &lt; M)
+                    B[j][k + 1] = a4;
+                <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                    B[j + 1][k + 1] = a5;
+                <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                    B[j + 2][k + 1] = a6;
+                <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                    B[j + 3][k + 1] = a7;
+            }
+        }
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3149257" class="outline-2">
+<h2 id="代码"><a id="org3149257"></a><span class="section-number-2">3</span> 代码</h2>
+<div class="outline-text-2" id="text-代码">
+</div>
+<div id="outline-container-org0380e76" class="outline-3">
+<h3 id="part-a-writing-a-cache-simulator-1"><a id="org0380e76"></a><span class="section-number-3">3.1</span> Part A: Writing a Cache Simulator</h3>
+<div class="outline-text-3" id="text-part-a-writing-a-cache-simulator-1">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">"cachelab.h"</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdlib.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;string.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;unistd.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;getopt.h&gt;</span>
+
+<span style="color: #228b22;">int</span> <span style="color: #a0522d;">s</span>, <span style="color: #a0522d;">E</span>, <span style="color: #a0522d;">b</span>;
+<span style="color: #228b22;">FILE</span> *<span style="color: #a0522d;">f</span>;
+<span style="color: #228b22;">int</span> <span style="color: #a0522d;">hit</span>, <span style="color: #a0522d;">miss</span>, <span style="color: #a0522d;">eviction</span>;
+<span style="color: #a020f0;">typedef</span> <span style="color: #a020f0;">struct</span>
+{
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">usedtime</span>;
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">tag</span>;
+} <span style="color: #228b22;">block</span>;
+<span style="color: #228b22;">block</span> *<span style="color: #a0522d;">cache</span>;
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">find</span>(<span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">addr</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">time</span>)
+{
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">tag</span> = addr &gt;&gt; b &gt;&gt; s;
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">setindex</span> = addr &gt;&gt; b ^ (tag &lt;&lt; s);
+    <span style="color: #228b22;">block</span> *<span style="color: #a0522d;">cacherow</span> = cache + E * setindex;
+    <span style="color: #228b22;">block</span> *<span style="color: #a0522d;">evictionrow</span> = cacherow;
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span> = 0; i &lt; E; i++)
+    {
+        <span style="color: #a020f0;">if</span> (cacherow[i].usedtime &amp;&amp; cacherow[i].tag == tag)
+        {
+            cacherow[i].usedtime = time;
+            hit++;
+            <span style="color: #a020f0;">return</span>;
+        }
+        <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (!cacherow[i].usedtime)
+        {
+            miss++;
+            cacherow[i].usedtime = time;
+            cacherow[i].tag = tag;
+            <span style="color: #a020f0;">return</span>;
+        }
+        <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (cacherow[i].usedtime &lt; evictionrow-&gt;usedtime)
+            evictionrow = cacherow + i;
+    }
+    miss++;
+    eviction++;
+    evictionrow-&gt;usedtime = time;
+    evictionrow-&gt;tag = tag;
+}
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">print_usage</span>()
+{
+    printf(<span style="color: #8b2252;">"Usage: ./csim [-hv] -s &lt;num&gt; -E &lt;num&gt; -b &lt;num&gt; -t &lt;file&gt;\n"</span>);
+    printf(<span style="color: #8b2252;">"Options\n"</span>);
+    printf(<span style="color: #8b2252;">"  -h        Print this help message.\n"</span>);
+    printf(<span style="color: #8b2252;">"  -v        Optional verbose flag.\n"</span>);
+    printf(<span style="color: #8b2252;">"  -s &lt;num&gt;: Number of set index bits.\n"</span>);
+    printf(<span style="color: #8b2252;">"  -E &lt;num&gt;: Number of lines per set.\n"</span>);
+    printf(<span style="color: #8b2252;">"  -b &lt;num&gt;: Number of block offset bits.\n"</span>);
+    printf(<span style="color: #8b2252;">"  -t &lt;file&gt;: Trace file.\n"</span>);
+    printf(<span style="color: #8b2252;">"\n"</span>);
+    printf(<span style="color: #8b2252;">"Exampes:\n"</span>);
+    printf(<span style="color: #8b2252;">"  linux&gt; ./csim -s 4 -E 1 -b 4 -t traces/yi.trace\n"</span>);
+    printf(<span style="color: #8b2252;">"  linux&gt; ./csim -v -s 8 -E 2 -b 4 -t traces/yi.trace\n"</span>);
+}
+
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">main</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">argc</span>, <span style="color: #228b22;">char</span> *<span style="color: #a0522d;">argv</span>[])
+{
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">opt</span>;
+    <span style="color: #228b22;">char</span> <span style="color: #a0522d;">op</span>;
+    <span style="color: #228b22;">unsigned</span> <span style="color: #a0522d;">addr</span>;
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">t</span> = 0;
+    <span style="color: #a020f0;">while</span> ((opt = getopt(argc, argv, <span style="color: #8b2252;">"hvs:E:b:t:"</span>)) != -1)
+    {
+        <span style="color: #a020f0;">switch</span> (opt)
+        {
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'h'</span>:
+            print_usage();
+            exit(0);
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'v'</span>:
+            <span style="color: #b22222;">// </span><span style="color: #b22222;">v = 1;</span>
+            <span style="color: #a020f0;">break</span>;
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'s'</span>:
+            s = atoi(optarg);
+            <span style="color: #a020f0;">break</span>;
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'E'</span>:
+            E = atoi(optarg);
+            <span style="color: #a020f0;">break</span>;
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'b'</span>:
+            b = atoi(optarg);
+            <span style="color: #a020f0;">break</span>;
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'t'</span>:
+            f = fopen(optarg, <span style="color: #8b2252;">"r"</span>);
+            <span style="color: #a020f0;">break</span>;
+        }
+    }
+    cache = (<span style="color: #228b22;">block</span> *)malloc(<span style="color: #a020f0;">sizeof</span>(block) * E &lt;&lt; s);
+    memset(cache, 0, <span style="color: #a020f0;">sizeof</span>(block) * E &lt;&lt; s);
+    <span style="color: #a020f0;">while</span> (fscanf(f, <span style="color: #8b2252;">"%s%x,%*d\n"</span>, &amp;op, &amp;addr) &gt; 0)
+    {
+        <span style="color: #a020f0;">switch</span> (op)
+        {
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'M'</span>:
+            hit++;
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'L'</span>:
+        <span style="color: #a020f0;">case</span> <span style="color: #8b2252;">'S'</span>:
+            find(addr, ++t);
+        }
+    }
+    fclose(f);
+    free(cache);
+    printSummary(hit, miss, eviction);
+    <span style="color: #a020f0;">return</span> 0;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0a07032" class="outline-3">
+<h3 id="part-boptimizing-matrix-transpose-1"><a id="org0a07032"></a><span class="section-number-3">3.2</span> Part B：Optimizing Matrix Transpose</h3>
+<div class="outline-text-3" id="text-part-boptimizing-matrix-transpose-1">
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">"cachelab.h"</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">"contracts.h"</span>
+
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">is_transpose</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">M</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">N</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">A</span>[N][M], <span style="color: #228b22;">int</span> <span style="color: #a0522d;">B</span>[M][N]);
+
+<span style="color: #b22222;">/* </span>
+<span style="color: #b22222;"> * transpose_submit - This is the solution transpose function that you</span>
+<span style="color: #b22222;"> *     will be graded on for Part B of the assignment. Do not change</span>
+<span style="color: #b22222;"> *     the description string "Transpose submission", as the driver</span>
+<span style="color: #b22222;"> *     searches for that string to identify the transpose function to</span>
+<span style="color: #b22222;"> *     be graded. The REQUIRES and ENSURES from 15-122 are included</span>
+<span style="color: #b22222;"> *     for your convenience. They can be removed if you like.</span>
+<span style="color: #b22222;"> </span><span style="color: #b22222;">*/</span>
+<span style="color: #228b22;">char</span> <span style="color: #a0522d;">transpose_submit_desc</span>[] = <span style="color: #8b2252;">"Transpose submission"</span>;
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">transpose_submit</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">M</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">N</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">A</span>[N][M], <span style="color: #228b22;">int</span> <span style="color: #a0522d;">B</span>[M][N])
+{
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>, <span style="color: #a0522d;">j</span>, <span style="color: #a0522d;">k</span>, <span style="color: #a0522d;">l</span>, <span style="color: #a0522d;">a0</span>, <span style="color: #a0522d;">a1</span>, <span style="color: #a0522d;">a2</span>, <span style="color: #a0522d;">a3</span>, <span style="color: #a0522d;">a4</span>, <span style="color: #a0522d;">a5</span>, <span style="color: #a0522d;">a6</span>, <span style="color: #a0522d;">a7</span>;
+    REQUIRES(M &gt; 0);
+    REQUIRES(N &gt; 0);
+
+    <span style="color: #a020f0;">if</span> (M == 61) {
+        <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += (i % 36 ? 20 : 16)) {
+            <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 4) {
+                <span style="color: #a020f0;">for</span> (k = i; k &lt; i + (i % 36 ? 20 : 16) &amp;&amp; k &lt; N; k += 2) {
+                    <span style="color: #a020f0;">if</span> (j &lt; M)
+                        a0 = A[k][j];
+                    <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                        a1 = A[k][j + 1];
+                    <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                        a2 = A[k][j + 2];
+                    <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                        a3 = A[k][j + 3];
+                    <span style="color: #a020f0;">if</span> (k + 1 &lt; N) {
+                        <span style="color: #a020f0;">if</span> (j &lt; M)
+                            a4 = A[k + 1][j];
+                        <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                            a5 = A[k + 1][j + 1];
+                        <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                            a6 = A[k + 1][j + 2];
+                        <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                            a7 = A[k + 1][j + 3];
+                    }
+                    <span style="color: #a020f0;">if</span> (j &lt; M)
+                        B[j][k] = a0;
+                    <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                        B[j + 1][k] = a1;
+                    <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                        B[j + 2][k] = a2;
+                    <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                        B[j + 3][k] = a3;
+                    <span style="color: #a020f0;">if</span> (k + 1 &lt; N) {
+                        <span style="color: #a020f0;">if</span> (j &lt; M)
+                            B[j][k + 1] = a4;
+                        <span style="color: #a020f0;">if</span> (j + 1 &lt; M)
+                            B[j + 1][k + 1] = a5;
+                        <span style="color: #a020f0;">if</span> (j + 2 &lt; M)
+                            B[j + 2][k + 1] = a6;
+                        <span style="color: #a020f0;">if</span> (j + 3 &lt; M)
+                            B[j + 3][k + 1] = a7;
+                    }
+                }
+            }
+        }
+    } <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (M == 32) {
+        <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += 8) {
+            <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 8) {
+                <span style="color: #a020f0;">if</span> (i == j) {
+                    <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                        a0 = A[k][j];
+                        a1 = A[k][j + 1];
+                        a2 = A[k][j + 2];
+                        a3 = A[k][j + 3];
+                        a4 = A[k][j + 4];
+                        a5 = A[k][j + 5];
+                        a6 = A[k][j + 6];
+                        a7 = A[k][j + 7];
+                        B[k][j] = a0;
+                        B[k][j + 1] = a1;
+                        B[k][j + 2] = a2;
+                        B[k][j + 3] = a3;
+                        B[k][j + 4] = a4;
+                        B[k][j + 5] = a5;
+                        B[k][j + 6] = a6;
+                        B[k][j + 7] = a7;
+                    }
+                    <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                        <span style="color: #a020f0;">for</span> (l = k; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+                            a0 = B[l][k];
+                            B[l][k] = B[k][l];
+                            B[k][l] = a0;
+                        }
+                    }
+                } <span style="color: #a020f0;">else</span> {
+                    <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 8 &amp;&amp; k &lt; N; k++) {
+                        <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+                            B[l][k] = A[k][l];
+                        }
+                    }
+                }
+            }
+        }
+    } <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span> (M == 64) {
+        <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j += 8) {
+            i = !(j &gt;&gt; 5) &lt;&lt; 5;
+            <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+                    B[k][i + l - j] = A[k][l];
+            <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+                    B[k - 4][i + l - j + 8] = A[k][l];
+            <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++) {
+                <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+                    B[l][k] = B[k][i + l - j];
+                <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+                    B[l][k] = B[k - 4][i + l - j + 8];
+            }
+            <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++) {
+                <span style="color: #a020f0;">for</span> (k = j; k &lt; j + 4 &amp;&amp; k &lt; N; k++)
+                    B[l][k] = B[k][i + l - j];
+                <span style="color: #a020f0;">for</span> (k = j + 4; k &lt; j + 8 &amp;&amp; k &lt; N; k++)
+                    B[l][k] = B[k - 4][i + l - j + 8];
+            }
+            <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i += 8) {
+                <span style="color: #a020f0;">if</span> (i != j) {
+                    <span style="color: #a020f0;">for</span> (k = i; k &lt; i + 2 &amp;&amp; k &lt; N; k++)
+                        <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = A[k][l];
+                    a0 = A[i][j + 4];
+                    a1 = A[i][j + 5];
+                    a2 = A[i][j + 6];
+                    a3 = A[i][j + 7];
+                    a4 = A[i + 1][j + 4];
+                    a5 = A[i + 1][j + 5];
+                    a6 = A[i + 1][j + 6];
+                    a7 = A[i + 1][j + 7];
+                    <span style="color: #a020f0;">for</span> (k = i + 2; k &lt; i + 4 &amp;&amp; k &lt; N; k++) {
+                        <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = A[k][l];
+                        <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                            B[k - i + j][l - j + i] = A[k][l];
+                    }
+                    <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                        <span style="color: #a020f0;">for</span> (l = j; l &lt; j + 2 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = A[k][l];
+                    <span style="color: #a020f0;">for</span> (k = i + 2; k &lt; i + 4 &amp;&amp; k &lt; N; k++)
+                        <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 6 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = B[k - i + j][l - j + i];
+                    B[j + 4][i] = a0;
+                    B[j + 5][i] = a1;
+                    B[j + 4][i + 1] = a4;
+                    B[j + 5][i + 1] = a5;
+                    a0 = B[j + 2][i + 6];
+                    a1 = B[j + 2][i + 7];
+                    a4 = B[j + 3][i + 6];
+                    a5 = B[j + 3][i + 7];
+                    <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                        <span style="color: #a020f0;">for</span> (l = j + 2; l &lt; j + 4 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = A[k][l];
+                    B[j + 6][i] = a2;
+                    B[j + 7][i] = a3;
+                    B[j + 6][i + 1] = a6;
+                    B[j + 7][i + 1] = a7;
+                    B[j + 6][i + 2] = a0;
+                    B[j + 7][i + 2] = a1;
+                    B[j + 6][i + 3] = a4;
+                    B[j + 7][i + 3] = a5;
+                    <span style="color: #a020f0;">for</span> (k = i + 4; k &lt; i + 8 &amp;&amp; k &lt; N; k++)
+                        <span style="color: #a020f0;">for</span> (l = j + 4; l &lt; j + 8 &amp;&amp; l &lt; M; l++)
+                            B[l][k] = A[k][l];
+                }
+            }
+        }
+    }
+
+    ENSURES(is_transpose(M, N, A, B));
+}
+
+<span style="color: #b22222;">/* </span>
+<span style="color: #b22222;"> * You can define additional transpose functions below. We've defined</span>
+<span style="color: #b22222;"> * a simple one below to help you get started. </span>
+<span style="color: #b22222;"> </span><span style="color: #b22222;">*/</span> 
+
+<span style="color: #b22222;">/* </span>
+<span style="color: #b22222;"> * trans - A simple baseline transpose function, not optimized for the cache.</span>
+<span style="color: #b22222;"> </span><span style="color: #b22222;">*/</span>
+<span style="color: #228b22;">char</span> <span style="color: #a0522d;">trans_desc</span>[] = <span style="color: #8b2252;">"Simple row-wise scan transpose"</span>;
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">trans</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">M</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">N</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">A</span>[N][M], <span style="color: #228b22;">int</span> <span style="color: #a0522d;">B</span>[M][N])
+{
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>, <span style="color: #a0522d;">j</span>, <span style="color: #a0522d;">tmp</span>;
+
+    REQUIRES(M &gt; 0);
+    REQUIRES(N &gt; 0);
+
+    <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i++) {
+        <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; j++) {
+            tmp = A[i][j];
+            B[j][i] = tmp;
+        }
+    }    
+
+    ENSURES(is_transpose(M, N, A, B));
+}
+
+<span style="color: #b22222;">/*</span>
+<span style="color: #b22222;"> * registerFunctions - This function registers your transpose</span>
+<span style="color: #b22222;"> *     functions with the driver.  At runtime, the driver will</span>
+<span style="color: #b22222;"> *     evaluate each of the registered functions and summarize their</span>
+<span style="color: #b22222;"> *     performance. This is a handy way to experiment with different</span>
+<span style="color: #b22222;"> *     transpose strategies.</span>
+<span style="color: #b22222;"> </span><span style="color: #b22222;">*/</span>
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">registerFunctions</span>()
+{
+    <span style="color: #b22222;">/* </span><span style="color: #b22222;">Register your solution function </span><span style="color: #b22222;">*/</span>
+    registerTransFunction(transpose_submit, transpose_submit_desc); 
+
+    <span style="color: #b22222;">/* </span><span style="color: #b22222;">Register any additional transpose functions </span><span style="color: #b22222;">*/</span>
+    registerTransFunction(trans, trans_desc); 
+
+}
+
+<span style="color: #b22222;">/* </span>
+<span style="color: #b22222;"> * is_transpose - This helper function checks if B is the transpose of</span>
+<span style="color: #b22222;"> *     A. You can check the correctness of your transpose by calling</span>
+<span style="color: #b22222;"> *     it before returning from the transpose function.</span>
+<span style="color: #b22222;"> </span><span style="color: #b22222;">*/</span>
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">is_transpose</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">M</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">N</span>, <span style="color: #228b22;">int</span> <span style="color: #a0522d;">A</span>[N][M], <span style="color: #228b22;">int</span> <span style="color: #a0522d;">B</span>[M][N])
+{
+    <span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>, <span style="color: #a0522d;">j</span>;
+
+    <span style="color: #a020f0;">for</span> (i = 0; i &lt; N; i++) {
+        <span style="color: #a020f0;">for</span> (j = 0; j &lt; M; ++j) {
+            <span style="color: #a020f0;">if</span> (A[i][j] != B[j][i]) {
+                <span style="color: #a020f0;">return</span> 0;
+            }
+        }
+    }
+    <span style="color: #a020f0;">return</span> 1;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5d6d950" class="outline-2">
+<h2 id="运行结果与分析"><a id="org5d6d950"></a><span class="section-number-2">4</span> 运行结果与分析</h2>
+<div class="outline-text-2" id="text-运行结果与分析">
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b22222;"># </span><span style="color: #b22222;">yaaannn @ YAAANNN-PC in ~/Documents/ICSLAB/cachelab [14:44:07] </span>
+$ python2 driver.py
+Part A: Testing cache simulator
+Running ./test-csim
+                        Your simulator     Reference simulator
+<span style="color: #0000ff;">Points</span> (s,E,b)    Hits  Misses  Evicts    Hits  Misses  Evicts
+     3 (1,1,1)       9       8       6       9       8       6  traces/yi2.trace
+     3 (4,2,4)       4       5       2       4       5       2  traces/yi.trace
+     3 (2,1,4)       2       3       1       2       3       1  traces/dave.trace
+     3 (2,1,3)     167      71      67     167      71      67  traces/trans.trace
+     3 (2,2,3)     201      37      29     201      37      29  traces/trans.trace
+     3 (2,4,3)     212      26      10     212      26      10  traces/trans.trace
+     3 (5,1,5)     231       7       0     231       7       0  traces/trans.trace
+     6 (5,1,5)  265189   21775   21743  265189   21775   21743  traces/long.trace
+    27
+
+
+Part B: Testing transpose <span style="color: #a020f0;">function</span>
+Running ./test-trans -M 32 -N 32
+Running ./test-trans -M 64 -N 64
+Running ./test-trans -M 61 -N 67
+
+Cache Lab summary:
+                        Points   Max pts      Misses
+Csim correctness          27.0        27
+Trans perf 32x32           8.0         8     invalid
+Trans perf 64x64           8.0         8        1027
+Trans perf 61x67          10.0        10        1692
+          Total points    53.0        53
+</pre>
+</div>
+
+<p>
+其中Cache模拟和矩阵转置均符合要求。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 何岩, 199074277</p>
+<p class="date">Created: 2021-10-21 Thu 08:13</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
