@@ -1,0 +1,13 @@
+This is bomb 28.
+
+It belongs to 199074277 (stan.edu.cn)
+
+如果你是64位Liunx系统，请先安装32位库，例
+
+```
+sudo apt install lib32z1
+```
+
+```
+./bomb < ans.txt
+```
